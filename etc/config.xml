@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <grabpay>
+                <model>Vnecoms\GrabPay\Model\OneTime\Pay</model>
+                <title>GrapPay Now</title>
+                <allowspecific>0</allowspecific>
+                <sandbox_mode>1</sandbox_mode>
+                <allow_paylater>1</allow_paylater>
+                <min_price_total>1</min_price_total>
+                <partner_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <max_price_total>10000000</max_price_total>
+                <active>0</active>
+            </grabpay>
+        </payment>
+    </default>
+</config>

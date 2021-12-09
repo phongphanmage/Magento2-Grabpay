@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <table name="ves_grabpay_transaction" resource="default" engine="innodb" comment="GrabPay Transaction">
+        <column xsi:type="int" name="pay_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="partner_txn_id" nullable="false" length="255" comment="Partner Transaction ID"/>
+        <column xsi:type="varchar" name="txn_id" nullable="false" length="255" comment="Transaction ID"/>
+        <column xsi:type="varchar" name="order_id" nullable="false" length="250" comment="Order Id"/>
+        <column xsi:type="varchar" name="state" nullable="false" length="250" comment="State"/>
+        <column xsi:type="varchar" name="status" nullable="true" length="250" comment="Status"/>
+        <column xsi:type="text" name="note" nullable="true" comment="Note"/>
+        <column xsi:type="datetime" name="created" nullable="true" comment="Created"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="pay_id"/>
+        </constraint>
+    </table>
+
+</schema>

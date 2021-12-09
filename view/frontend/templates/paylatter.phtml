@@ -1,0 +1,28 @@
+<?php
+$product = $block->getProduct();
+$helper = $this->helper("Vnecoms\GrabPay\Helper\Data");
+?>
+
+<?php if($helper->isAllowPayLater()): ?>
+<div class="grab-price-divider-widget"
+     data-money-format="<?= $helper->getBaseCurrencyGrabpay() ?>"
+     data-product-price="<?= $helper->getProductPriceForGrabpay($product) ?>"
+     data-min-price="<?= $helper->getMinTotal() ?>"
+     data-max-price="<?= $helper->getMaxTotal() ?>">
+</div>
+
+<script type="text/javascript">
+    require(
+        [
+            'jquery',
+            'Vnecoms_GrabPay/js/core/grab-paylater'
+        ],
+        function(
+            $,
+            GrabWidget
+        ) {
+            GrabWidget.init();
+        }
+    );
+</script>
+<?php endif; ?>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/grab/transaction" method="POST">
+        <service class="Vnecoms\GrabPay\Api\TransactionRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Sales::transactions_fetch" />
+        </resources>
+    </route>
+
+    <route url="/V1/grab/transaction/:transactionId" method="GET">
+        <service class="Vnecoms\GrabPay\Api\TransactionRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_Sales::transactions_fetch" />
+        </resources>
+    </route>
+
+    <route url="/V1/grab/transaction/:transactionId" method="DELETE">
+        <service class="Vnecoms\GrabPay\Api\TransactionRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento_Sales::transactions_fetch"/>
+        </resources>
+    </route>
+
+    <route url="/V1/grab/transaction" method="GET">
+        <service class="Vnecoms\GrabPay\Api\TransactionRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::transactions_fetch"/>
+        </resources>
+    </route>
+
+</routes>
