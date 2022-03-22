@@ -22,5 +22,65 @@
             <column name="pay_id"/>
         </constraint>
     </table>
+    
+    <table name="ves_grabpay_batch" resource="default" engine="innodb" comment="GrabPay Batch">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="batch_id" nullable="false" length="255" comment="Batch Id"/>
+        <column xsi:type="varchar" name="grapfile_name" nullable="false" length="255" comment="Grap File Name"/>
+        <column xsi:type="varchar" name="gcfile_name" nullable="false" length="250" comment="GC File Name"/>
+        <column xsi:type="int" name="number_records" unsigned="false" nullable="false" identity="false"
+                comment="Number Records"/>
+        <column xsi:type="int" name="number_records_settlement_txn" unsigned="false" nullable="false" identity="false"
+                comment="Number Records Settlement Txn"/>
+        <column xsi:type="int" name="number_records_collect_txn" unsigned="false" nullable="false" identity="false"
+                comment="Number Records Collect Txn"/>
+        <column xsi:type="int" name="number_records_refund_txn" unsigned="false" nullable="false" identity="false"
+                comment="Number Records Refund Txn"/>
+        <column xsi:type="decimal" name="transaction_amt" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Transaction Amt"/>
+        <column xsi:type="decimal" name="transaction_amt_settlement" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Transaction Amt Settlement"/>
+        <column xsi:type="decimal" name="transaction_amt_collect" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Transaction Amt Collect"/>
+        <column xsi:type="decimal" name="transaction_amt_refund" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Transaction Amt Refund"/>
+        <column xsi:type="datetime" name="date_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
+    <table name="ves_grabpay_batch_details" resource="default" engine="innodb" comment="GrabPay Batch Details">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="batch_id" unsigned="true" nullable="false" identity="false"
+                comment="Batch Id"/>
+
+        <column xsi:type="varchar" name="request_date" nullable="true" length="250" comment="Request Date"/>
+        <column xsi:type="varchar" name="batch_date" nullable="true" length="250" comment="Batch Date"/>
+        <column xsi:type="varchar" name="status" nullable="true" length="250" comment="Status"/>
+        <column xsi:type="decimal" name="requested_amount" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Request Amount"/>
+        <column xsi:type="varchar" name="requesed_amount_currency_code" nullable="false" length="250" comment="Request Amount Currency Code"/>
+        <column xsi:type="varchar" name="card_type" nullable="true" length="250" comment="Card Type"/>
+        <column xsi:type="varchar" name="merchant_reference_number" nullable="true" length="250" comment="Merchant Reference Number"/>
+        <column xsi:type="varchar" name="grab_transaction_id" nullable="true" length="250" comment="Grab Transaction Id"/>
+        <column xsi:type="varchar" name="original_grab_transaction_id" nullable="true" length="250" comment="Origin Grab Transaction Id"/>
+
+        <column xsi:type="varchar" name="transaction_type" nullable="true" length="250" comment="Transaction Type"/>
+        <column xsi:type="datetime" name="date_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+
+        <constraint xsi:type="foreign" referenceId="FOREIGN_KEY_BATCH_ID"
+                    table="ves_grabpay_batch_details" column="batch_id" referenceTable="ves_grabpay_batch"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
 
 </schema>

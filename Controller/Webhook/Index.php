@@ -45,6 +45,16 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $_transactionFactory;
 
     /**
+     * @var \GainCity\SalesApi\Service\DispatchPaidOrder
+     */
+    protected $dispatchPaidOrder;
+
+    /**
+     * @var \GainCity\SalesApi\Logger\Logger
+     */
+    protected $log;
+
+    /**
      * Index constructor.
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Action\Context $context
@@ -52,6 +62,8 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param \Vnecoms\GrabPay\Logger\Logger $logger
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
+     * @param \GainCity\SalesApi\Service\DispatchPaidOrder $dispatchPaidOrder
+     * @param \GainCity\SalesApi\Logger\Logger $log
      * @param StatusResolver $statusResolver
      * @param OrderSender $orderSender
      */
@@ -62,6 +74,8 @@ class Index extends \Magento\Framework\App\Action\Action
         \Vnecoms\GrabPay\Logger\Logger $logger,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
+        \GainCity\SalesApi\Service\DispatchPaidOrder $dispatchPaidOrder,
+        \GainCity\SalesApi\Logger\Logger $log,
         StatusResolver $statusResolver,
         OrderSender $orderSender
     ) {
@@ -72,6 +86,8 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->statusResolver = $statusResolver;
         $this->orderSender = $orderSender;
         $this->_transactionFactory = $transactionFactory;
+        $this->dispatchPaidOrder = $dispatchPaidOrder;
+        $this->log               = $log;
         parent::__construct($context);
     }
 
@@ -100,8 +116,9 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         try {
             $body = @file_get_contents('php://input');
+            $this->logger->info($body);
             $body = json_decode($body, true);
-
+            
             if (!isset($body['partnerTxID'])) {
                 $message = __('Payment Failed with GrabPay. Reason: Order do not exist');
                 $this->logger->info($message);
@@ -194,6 +211,15 @@ class Index extends \Magento\Framework\App\Action\Action
                 $order->addStatusHistoryComment($comment);
                 $order->save()
                 ;
+            }
+        }
+
+        if ($invoice) {
+            try {
+                $this->dispatchPaidOrder->execute($order);
+            }catch (\Exception $e) {
+                $this->log->error(__(sprintf('Order Id %s - Error From Callback At PaymentSuccess Event - %s',
+                    $order->getId() , $e->getMessage())));
             }
         }
 

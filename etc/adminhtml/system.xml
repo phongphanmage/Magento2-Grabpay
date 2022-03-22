@@ -93,6 +93,23 @@
                 <field id="sort_order" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sort Order</label>
                 </field>
+
+                <field id="sender_email_identity" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                </field>
+
+                <field id="export_file_template" translate="label comment" type="select" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>GrabPay Export File Notification Template (Send to admin)</label>
+                    <tooltip>This email is sent to vendor when place order.</tooltip>
+                    <source_model>Vnecoms\GrabPay\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="email_to" translate="label" type="text" sortOrder="211" showInDefault="220" showInWebsite="1" showInStore="1">
+                    <label>Email To</label>
+                    <tooltip><![CDATA[This email will be sent to admin.]]></tooltip>
+                </field>
+
             </group>
         </section>
     </system>

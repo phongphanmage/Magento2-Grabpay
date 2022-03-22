@@ -50,6 +50,11 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $logger;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $session;
+
+    /**
      * Index constructor.
      * @param \Vnecoms\GrabPay\Helper\Data $helper
      * @param \Vnecoms\GrabPay\Model\OneTime\Pay $payment
@@ -60,6 +65,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param \Vnecoms\GrabPay\Model\TransactionFactory $transaction
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Vnecoms\GrabPay\Logger\Logger $logger
+     * @param \Magento\Checkout\Model\Session $session
      */
     public function __construct(
         \Vnecoms\GrabPay\Helper\Data $helper,
@@ -70,7 +76,8 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Registry $registry,
         \Vnecoms\GrabPay\Model\TransactionFactory $transaction,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Vnecoms\GrabPay\Logger\Logger $logger
+        \Vnecoms\GrabPay\Logger\Logger $logger,
+        \Magento\Checkout\Model\Session $session
     ) {
         $this->curl = $curl;
         $this->helper = $helper;
@@ -80,6 +87,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->transaction = $transaction;
         $this->timezone = $timezone;
         $this->logger = $logger;
+        $this->session = $session;
         parent::__construct($context);
     }
 
@@ -153,9 +161,11 @@ class Index extends \Magento\Framework\App\Action\Action
                     $message = __('Payment Failed with GrabPay');
                     $order->addStatusHistoryComment($message, \Magento\Sales\Model\Order::STATE_CANCELED);
                     $order->save();
+                    $this->_getCheckoutSession()->restoreQuote();
                     $this->_redirect('checkout/cart');
                 }
             } else if(isset($params['error'])) {
+                $this->_getCheckoutSession()->restoreQuote();
                 // cancel order
                 $order->cancel();
                 $message = __('Payment Failed with GrabPay. Reason: '.$params['error']);
@@ -164,10 +174,21 @@ class Index extends \Magento\Framework\App\Action\Action
                 $this->_redirect('checkout/cart');
             }
         } catch (\Exception $e) {
+            $this->_getCheckoutSession()->restoreQuote();
             $this->logger->info($e->getMessage());
             $this->_redirect('checkout/cart');
         }
 
+    }
+
+    /**
+     * Return checkout session object
+     *
+     * @return \Magento\Checkout\Model\Session
+     */
+    protected function _getCheckoutSession()
+    {
+        return $this->session;
     }
 
     /**

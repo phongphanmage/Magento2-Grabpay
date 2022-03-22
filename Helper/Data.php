@@ -67,10 +67,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return mixed
      */
+    public function isEnablePayment() {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $payment = $objectManager->get('Vnecoms\GrabPay\Model\OneTime\Pay');
+        return $payment->getConfigValue("active");
+    }
+
+    /**
+     * @return mixed
+     */
     public function isAllowPayLater() {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $payment = $objectManager->get('Vnecoms\GrabPay\Model\OneTime\Pay');
-        return $payment->getConfigValue("allow_paylater");
+        return $payment->getConfigValue("allow_paylater") && $this->isEnablePayment();
     }
 
     /**
@@ -120,7 +129,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $productPrice = $regularPrice;
-        if($specialPrice > 0){
+        if($specialPrice > 0 && $productPrice >= $specialPrice){
             $productPrice = $specialPrice;
         }
 
@@ -131,10 +140,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getBaseCurrencyGrabpay() {
+    public function getBaseCurrencyAmountGrabpay() {
         $currency = $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
         return $currency." {{amount}}";
     }
 
+    /**
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getBaseCurrencyGrabpay() {
+        $currency = $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
+        return $currency;
+    }
 
 }

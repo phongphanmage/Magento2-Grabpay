@@ -43,7 +43,7 @@ define([
          */
         initialize: function () {
             this._super()
-                .observe(['amount', 'currency']);
+                .observe(['amount', 'currency', 'currencyCode']);
 
             if (this.displayAmount) {
                 layout([this.amountComponentConfig]);
@@ -66,7 +66,7 @@ define([
          *
          */
         renderMessage: function () {
-            GrabWidget.init();
+            GrabWidget.invoke();
         }
     });
 });

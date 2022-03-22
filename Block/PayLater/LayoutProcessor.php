@@ -69,6 +69,7 @@ class LayoutProcessor implements LayoutProcessorInterface
             $componentAttributes = $payLaterPlaceOrder['config']['attributes'] ?? [];
             $componentAttributes["data-min-price"] = $this->payLaterConfig->getConfigValue("min_price_total");
             $componentAttributes["data-max-price"] = $this->payLaterConfig->getConfigValue("max_price_total");
+            
             $config['attributes'] = $componentAttributes;
 
             $payLaterPlaceOrder['config'] = $config;

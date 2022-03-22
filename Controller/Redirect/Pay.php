@@ -103,11 +103,11 @@ class Pay extends \Magento\Framework\App\Action\Action
     {
         $order = $this->getOrder();
 
-        if (!$order || $order->getId() < 1) {
+        if (!$order || !$order->getId()) {
             $this->_redirect('checkout/cart');
             return;
         }
-        
+
         $gp = new OneTimeCharge(
             $this->payment->getConfigValue('partner_id'),
             $this->payment->getConfigValue('partner_secret'),
@@ -131,6 +131,12 @@ class Pay extends \Magento\Framework\App\Action\Action
             $order->getBaseGrandTotal() * 100,
             $product_name
         );
+
+        $logResponse = $response;
+        if (is_array($response)) {
+            $logResponse = json_encode($response);
+        }
+        $this->logger->info($logResponse);
 
         if ($response && isset($response['partnerTxID'])) {
             try {
@@ -160,14 +166,26 @@ class Pay extends \Magento\Framework\App\Action\Action
                 return $this->getResponse()->setRedirect($authLink);
 
             } catch (\Exception $e) {
+                $this->_getCheckoutSession()->restoreQuote();
                 $this->messageManager->addError($e->getMessage());
                 $this->_redirect('checkout/cart');
                 return;
             }
         } else {
+            $this->_getCheckoutSession()->restoreQuote();
             $this->messageManager->addError(__('Something wrong when init payment Grabpay.'));
             $this->_redirect('checkout/cart');
             return;
         }
+    }
+
+    /**
+     * Return checkout session object
+     *
+     * @return \Magento\Checkout\Model\Session
+     */
+    protected function _getCheckoutSession()
+    {
+        return $this->session;
     }
 }

@@ -1,0 +1,57 @@
+{
+    "ves_grabpay_transaction": {
+        "column": {
+            "pay_id": true,
+            "partner_txn_id": true,
+            "txn_id": true,
+            "order_id": true,
+            "state": true,
+            "status": true,
+            "note": true,
+            "created": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "ves_grabpay_batch": {
+        "column": {
+            "entity_id": true,
+            "batch_id": true,
+            "grapfile_name": true,
+            "gcfile_name": true,
+            "number_records": true,
+            "number_records_settlement_txn": true,
+            "number_records_collect_txn": true,
+            "number_records_refund_txn": true,
+            "transaction_amt": true,
+            "transaction_amt_settlement": true,
+            "transaction_amt_collect": true,
+            "transaction_amt_refund": true,
+            "date_time": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "ves_grabpay_batch_details": {
+        "column": {
+            "entity_id": true,
+            "batch_id": true,
+            "request_date": true,
+            "batch_date": true,
+            "status": true,
+            "requested_amount": true,
+            "requesed_amount_currency_code": true,
+            "card_type": true,
+            "merchant_reference_number": true,
+            "grab_transaction_id": true,
+            "transaction_type": true,
+            "date_time": true
+        },
+        "constraint": {
+            "VES_GRABPAY_BATCH_DETAILS_BATCH_ID_VES_GRABPAY_BATCH_ENTITY_ID": true,
+            "PRIMARY": true
+        }
+    }
+}

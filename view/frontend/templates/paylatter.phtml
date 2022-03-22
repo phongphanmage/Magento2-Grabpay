@@ -5,10 +5,14 @@ $helper = $this->helper("Vnecoms\GrabPay\Helper\Data");
 
 <?php if($helper->isAllowPayLater()): ?>
 <div class="grab-price-divider-widget"
-     data-money-format="<?= $helper->getBaseCurrencyGrabpay() ?>"
+     data-money-format="<?= $helper->getBaseCurrencyAmountGrabpay() ?>"
      data-product-price="<?= $helper->getProductPriceForGrabpay($product) ?>"
      data-min-price="<?= $helper->getMinTotal() ?>"
-     data-max-price="<?= $helper->getMaxTotal() ?>">
+     data-max-price="<?= $helper->getMaxTotal() ?>"
+     data-currency-code="<?= $helper->getBaseCurrencyGrabpay() ?>"
+     data-widget-type="single_line"
+     data-widget-size="small"
+>
 </div>
 
 <script type="text/javascript">
@@ -21,7 +25,7 @@ $helper = $this->helper("Vnecoms\GrabPay\Helper\Data");
             $,
             GrabWidget
         ) {
-            GrabWidget.init();
+            GrabWidget.invoke();
         }
     );
 </script>

@@ -46,6 +46,7 @@ define([
             quote.totals.subscribe(function (newValue) {
                 payLater.currency(newValue['base_currency_code']+" {{amount}}");
                 payLater.amount(newValue['base_grand_total']);
+                payLater.currencyCode(newValue['base_currency_code']);
             });
         }
     });

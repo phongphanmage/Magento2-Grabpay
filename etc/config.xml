@@ -13,6 +13,8 @@
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <max_price_total>10000000</max_price_total>
                 <active>0</active>
+                <sender_email_identity>general</sender_email_identity>
+                <export_file_template>payment_grabpay_export_file_template</export_file_template>
             </grabpay>
         </payment>
     </default>
